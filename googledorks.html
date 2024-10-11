@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="aoaydin Abdurrahman Aydın">
+    <meta name="description" content="Google Dork Arama sayfası ile gelişmiş arama sorguları oluşturun ve istediğiniz dosya türlerine kolayca erişin.">
+    <meta name="keywords" content="Google Dork, arama, dosya türü, gelişmiş arama, Google Dork arama">
+    <title>Google Dork Arama</title>
+    <style>
+        /* Yalın ve Mobil Uyumlu Stil Ayarları */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #0071e3;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .options-group label {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .options-group input[type="radio"] {
+            margin-right: 8px;
+            accent-color: #0071e3;
+        }
+
+        button {
+            background-color: #0071e3;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            margin-top: 30px;
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Mobil için optimize edilmiş tasarım */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ne Aramak İstiyorsunuz?</h1>
+
+        <div class="search-box">
+            <input type="text" id="searchQuery" placeholder="Aramak istediğiniz kelimeyi girin..." />
+        </div>
+
+        <h3>Dosya Türü</h3>
+        <div class="options-group">
+            <label><input type="radio" name="fileType" value="pdf"> PDF</label>
+            <label><input type="radio" name="fileType" value="docx"> DOCX</label>
+            <label><input type="radio" name="fileType" value="xlsx"> XLSX</label>
+            <label><input type="radio" name="fileType" value="pptx"> PPTX</label>
+            <label><input type="radio" name="fileType" value="txt"> TXT</label>
+            <label><input type="radio" name="fileType" value="exe"> EXE</label>
+            <label><input type="radio" name="fileType" value=""> Hepsi</label>
+        </div>
+
+        <h3>Arama Noktası</h3>
+        <div class="options-group">
+            <label><input type="radio" name="searchPoint" value="drive.google.com"> Google Drive</label>
+            <label><input type="radio" name="searchPoint" value="disk.yandex.com"> Yandex Disk</label>
+            <label><input type="radio" name="searchPoint" value="academia.edu"> Academia.edu</label>
+            <label><input type="radio" name="searchPoint" value="researchgate.net"> ResearchGate</label>
+            <label><input type="radio" name="searchPoint" value=""> Hepsi</label>
+        </div>
+
+        <button onclick="performSearch()">Ara</button>
+
+        <!-- Kayan Yazı -->
+        <div class="marquee">
+            <span>Lütfen arama sonuçlarının yasal kullanımına dikkat edin.</span>
+        </div>
+
+        <footer>
+            <p>© 2024 aoaydin</p>
+        </footer>
+    </div>
+
+    <script>
+        function performSearch() {
+            let query = document.getElementById('searchQuery').value.trim();
+            let fileType = document.querySelector('input[name="fileType"]:checked')?.value || "";
+            let searchPoint = document.querySelector('input[name="searchPoint"]:checked')?.value || "";
+
+            if (!query) {
+                alert("Lütfen bir arama terimi girin.");
+                return;
+            }
+
+            let dork = `"${query}"`;
+            if (fileType) {
+                dork += ` filetype:${fileType}`;
+            }
+            if (searchPoint) {
+                dork += ` site:${searchPoint}`;
+            }
+
+            // Arama sorgusunu yeni bir sekmede aç
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(dork)}`, '_blank');
+        }
+
+        // Enter tuşu ile arama yapma özelliği
+        document.getElementById('searchQuery').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>
